@@ -3,22 +3,31 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, Input, Image } from "@rneui/themed";
 import { StatusBar } from "expo-status-bar";
 import { KeyboardAvoidingView } from "react-native";
-import { getAuth, onAuthStateChanged} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../firebase";
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth=getAuth();
-  useEffect(()=>{
-    const unsubscribe =onAuthStateChanged(auth,(authUser)=>{
+  // useEffect(()=>{
+  //   const unsubscribe =onAuthStateChanged(auth,(authUser)=>{
+  //     if(authUser){
+  //       navigation.replace("Home")
+  //     }
+  //   })
+  //   return unsubscribe;
+  // },[])
+  
+  const signIn=()=>{
+    signInWithEmailAndPassword(auth,email,password)
+    .then((authUser)=>{
       if(authUser){
         navigation.replace("Home")
       }
     })
-    return unsubscribe;
-  },[])
-
+    .catch((error)=>alert(error.message))
+  }
   return (
     <KeyboardAvoidingView behaviour="padding" style={styles.container}>
       <StatusBar style="light" />
@@ -44,7 +53,7 @@ const LoginScreen = ({navigation}) => {
           onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <Button title="Login" color="green" containerStyle={styles.button} />
+      <Button title="Login" color="green" containerStyle={styles.button} onPress={signIn}/>
       <Button
         title="Register"
         type="outline"

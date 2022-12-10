@@ -4,7 +4,11 @@ import { KeyboardAvoidingView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Input, Button, Text } from "@rneui/themed";
 import { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -15,11 +19,12 @@ const RegisterScreen = ({ navigation }) => {
 
   const register = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((authUser) => {
-        authUser.user.displayName = name;
-        authUser.user.photoURL =
-          imageUrl ||
-          "https://cdn.pixabay.com/photo/2015/10/05/2/37/blank-profile-picture-973460__480.png";
+      .then(() => {
+        updateProfile(auth.currentUser,{
+          displayName: name, photoURL: imageUrl
+        })
+        .then(navigation.replace("Login"))
+        .catch((error)=>alert(error.message))
       })
       .catch((error) => alert(error.message));
   };
