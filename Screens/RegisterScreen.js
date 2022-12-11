@@ -72,7 +72,6 @@ const RegisterScreen = ({ navigation }) => {
         color="green"
         containerStyle={styles.button}
       />
-      <View style={{ height: 100 }} />
     </KeyboardAvoidingView>
   );
 };

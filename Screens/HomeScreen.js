@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect } from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -12,16 +12,30 @@ import { Input, Button, Text, Avatar } from "@rneui/themed";
 import CustomListItem from "../components/CustomListItem";
 import { getAuth, signOut } from "firebase/auth";
 import { Icon } from "@rneui/themed";
+import { doc, getFirestore, onSnapshot, collection } from "firebase/firestore";
 
 const HomeScreen = ({ navigation }) => {
   const auth = getAuth();
+  const db = getFirestore();
   const user = auth.currentUser;
-  const signOutUser=()=>{
+  const [chats, setChats] = useState([]);
+  const signOutUser = () => {
     signOut(auth)
-    .then(()=> navigation.replace("Login"))
-    .catch((error)=> alert(error.message))
-  }
+      .then(() => navigation.replace("Login"))
+      .catch((error) => alert(error.message));
+  };
   useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "chats"), (doc) => {
+      setChats(
+        doc.docChanges().map((change) => ({
+          id: change.doc.id,
+          data: change.doc.data(),
+        }))
+      );
+    });
+    return unsubscribe;
+  });
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <View>
@@ -35,22 +49,51 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ),
-      headerRight:()=>(
-        <View style={{flexDirection:"row", justifyContent:"space-between", width:55}}>
-            <TouchableOpacity activeOpacity={0.5}>
-                <Icon name="rowing" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5}>
-                <Icon name="rowing" size={24} color="white"></Icon>
-            </TouchableOpacity>
+      headerRight: () => (
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: 65,
+          }}
+        >
+          <TouchableOpacity activeOpacity={0.5}>
+            <Icon name="camera-enhance" size={30} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5}>
+            <Icon
+              onPress={() => {
+                navigation.navigate("AddChat");
+              }}
+              name="add"
+              size={30}
+              color="white"
+            ></Icon>
+          </TouchableOpacity>
         </View>
-      )
+      ),
     });
-  },);
+  }, [navigation]);
+
+  const enterChat = (id, chatName) => {
+    navigation.navigate("Chat", {
+      id,
+      chatName,
+    });
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
-        <CustomListItem />
+        <StatusBar style="light" />
+        {chats.map(({ id, data: { chatName } }) => (
+          <CustomListItem
+            key={id}
+            id={id}
+            chatName={chatName}
+            enterChat={enterChat}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

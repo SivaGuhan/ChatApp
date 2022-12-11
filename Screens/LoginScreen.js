@@ -61,7 +61,6 @@ const LoginScreen = ({navigation}) => {
         containerStyle={styles.button}
         onPress={()=>navigation.navigate("Register")}
       />
-      <View style={{height:100}}/>
     </KeyboardAvoidingView>
   );
 };
@@ -84,6 +83,9 @@ const styles = StyleSheet.create({
     width:300
   },
   button:{
-    width:200
+    display:"flex",
+    justifyContent:"space-between",
+    width:200,
+    height:50
   }
 });
