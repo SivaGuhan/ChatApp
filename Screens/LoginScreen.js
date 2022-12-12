@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Input, Image } from "@rneui/themed";
 import { StatusBar } from "expo-status-bar";
@@ -10,14 +10,14 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth=getAuth();
-  // useEffect(()=>{
-  //   const unsubscribe =onAuthStateChanged(auth,(authUser)=>{
-  //     if(authUser){
-  //       navigation.replace("Home")
-  //     }
-  //   })
-  //   return unsubscribe;
-  // },[])
+  useLayoutEffect(()=>{
+    const unsubscribe =onAuthStateChanged(auth,(authUser)=>{
+      if(authUser){
+        navigation.replace("Home")
+      }
+    })
+    return unsubscribe;
+  },[])
   
   const signIn=()=>{
     signInWithEmailAndPassword(auth,email,password)

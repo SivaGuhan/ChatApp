@@ -7,16 +7,11 @@ import { StyleSheet, Text, View } from "react-native";
 const AddChat = ({ navigation }) => {
   const [input, setInput] = useState("");
   const db = getFirestore();
-  const createChat = async () => {
-    try{
-        await addDoc(collection(db, "chats"), {
+  const createChat = () => {
+        addDoc(collection(db, "chats"), {
             chatName:input,
-          });        
-        navigation.goBack();
-    }
-    catch(e){
-        alert(e.message);
-    }
+          }); 
+          navigation.goBack();       
   };
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,7 +29,7 @@ const AddChat = ({ navigation }) => {
         leftIcon={<Icon name="chat-bubble-outline" size={30} color="black" />}
         onSubmitEditing={createChat}
       />
-      <Button onPress={createChat} title="Create a new Chat" color="green" />
+      <Button disabled={!input} onPress={createChat} title="Create a new Chat" color="green" />
     </View>
   );
 };
