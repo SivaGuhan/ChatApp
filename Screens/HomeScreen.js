@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
     });
     return unsubscribe;
   });
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <View>
@@ -73,7 +73,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       ),
     });
-  }, [navigation]);
+  });
 
   const enterChat = (id, chatName) => {
     navigation.navigate("Chat", {
