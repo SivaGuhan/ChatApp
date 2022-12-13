@@ -54,6 +54,7 @@ const LoginScreen = ({navigation}) => {
         />
       </View>
       <Button title="Login" color="green" containerStyle={styles.button} onPress={signIn}/>
+      <View style={{height:20}}></View>
       <Button
         title="Register"
         type="outline"
@@ -86,6 +87,8 @@ const styles = StyleSheet.create({
     display:"flex",
     justifyContent:"space-between",
     width:200,
-    height:50
+    borderRadius:20,
+    borderWidth:1,
+    borderColor:"green"
   }
 });

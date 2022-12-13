@@ -37,6 +37,9 @@ const HomeScreen = ({ navigation }) => {
   });
   useEffect(() => {
     navigation.setOptions({
+      headerStyle :{backgroundColor:"white"},
+      headerTitleStyle :{color:"black"},
+      headerTintColor : "black",
       headerLeft: () => (
         <View>
           <TouchableOpacity onPress={signOutUser} activeOpacity={0.5}>
@@ -58,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           <TouchableOpacity activeOpacity={0.5}>
-            <Icon name="camera-enhance" size={30} color="white" />
+            <Icon name="camera-enhance" size={30}  />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5}>
             <Icon
@@ -67,7 +70,6 @@ const HomeScreen = ({ navigation }) => {
               }}
               name="add"
               size={30}
-              color="white"
             ></Icon>
           </TouchableOpacity>
         </View>

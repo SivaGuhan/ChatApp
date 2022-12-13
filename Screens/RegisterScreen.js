@@ -66,7 +66,7 @@ const RegisterScreen = ({ navigation }) => {
         />
       </View>
       <Button
-        raised
+        disabled={!name || !email || !password}
         onPress={register}
         title="Register"
         color="green"
@@ -92,5 +92,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 10,
     width: 200,
+    borderRadius:20,
+    borderColor:"green"
   },
 });

@@ -8,10 +8,10 @@ const AddChat = ({ navigation }) => {
   const [input, setInput] = useState("");
   const db = getFirestore();
   const createChat = () => {
-        addDoc(collection(db, "chats"), {
-            chatName:input,
-          }); 
-          navigation.goBack();       
+    addDoc(collection(db, "chats"), {
+      chatName: input,
+    });
+    navigation.goBack();
   };
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,7 +20,7 @@ const AddChat = ({ navigation }) => {
   });
   return (
     <View style={styles.container}>
-        <StatusBar style="light" />
+      <StatusBar style="light" />
       <Input
         placeholder="Enter a Chat Name"
         autofocus
@@ -29,7 +29,13 @@ const AddChat = ({ navigation }) => {
         leftIcon={<Icon name="chat-bubble-outline" size={30} color="black" />}
         onSubmitEditing={createChat}
       />
-      <Button disabled={!input} onPress={createChat} title="Create a new Chat" color="green" />
+      <Button
+        disabled={!input}
+        containerStyle={styles.button}
+        onPress={createChat}
+        title="Create a new Chat"
+        color="green"
+      />
     </View>
   );
 };
@@ -37,9 +43,13 @@ const AddChat = ({ navigation }) => {
 export default AddChat;
 
 const styles = StyleSheet.create({
-    container:{
-        backgroundColor:"white",
-        padding:30,
-        height:"100%"
-    }
+  container: {
+    backgroundColor: "white",
+    padding: 30,
+    height: "100%",
+  },
+  button: {
+    borderRadius: 20,
+    borderColor: "green",
+  },
 });
