@@ -7,6 +7,7 @@ import {
   serverTimestamp,
   onSnapshot,
   orderBy,
+  query,
 } from "firebase/firestore";
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import {
@@ -25,7 +26,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const auth = getAuth();
   const db = getFirestore();
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "left",
       headerTitle: () => (
@@ -33,7 +34,9 @@ const ChatScreen = ({ navigation, route }) => {
           <Avatar
             rounded
             source={{
-              uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
+              uri: messages?.[messages.length-1]?.data.photoURL ||
+              "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
+  
             }}
           />
           <Text
@@ -65,7 +68,7 @@ const ChatScreen = ({ navigation, route }) => {
         </View>
       ),
     });
-  }, [navigation]);
+  });
 
   const sendMessage = () => {
     Keyboard.dismiss();
@@ -80,8 +83,8 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   useLayoutEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(collection(db, "chats"), route.params.id, "messages"),
+    const unsubscribe = onSnapshot(query(
+      collection(collection(db, "chats"), route.params.id, "messages"),orderBy("timeStamp")),
       (doc) => {
         setMessages(
           doc.docChanges().map((change) => ({

@@ -3,14 +3,14 @@ import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Input, Button, Text, ListItem, Avatar } from "@rneui/themed";
 import { getAuth } from "firebase/auth";
-import { getFirestore, onSnapshot, collection } from "firebase/firestore";
+import { getFirestore, onSnapshot, collection, query, orderBy } from "firebase/firestore";
 
 const CustomListItem = ({ id, chatName, enterChat }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const db = getFirestore();
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(collection(db, "chats"), id, "messages"),
+    const unsubscribe = onSnapshot(query(
+      collection(collection(db, "chats"), id, "messages"),orderBy("timeStamp")),
       (doc) => {
         setChatMessages(
           doc.docChanges().map((change) => ({
